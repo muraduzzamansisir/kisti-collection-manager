@@ -1,197 +1,459 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="bn">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>কিস্তি আদায় ম্যানেজার</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Shishir Collection</title>
+
 <style>
-:root{--blue:#155eef;--ink:#172033;--muted:#667085;--line:#e4e7ec;--bg:#f5f7fb;--green:#067647;--red:#b42318}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:Arial,"Noto Sans Bengali",sans-serif}
-header{background:#123b70;color:#fff;padding:20px 16px}header h1{font-size:24px;margin:0 0 6px}header p{margin:0;color:#dbeafe;font-size:14px}
-main{max-width:1200px;margin:18px auto;padding:0 14px}.notice{background:#fff8e6;border:1px solid #f3d58b;padding:12px;border-radius:10px;margin-bottom:14px;font-size:13px}
-.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px}.stat,.panel{background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px}
-.stat{cursor:pointer;text-align:left;color:inherit;font:inherit;width:100%}.stat:hover{border-color:var(--blue)}
-.stat small{color:var(--muted)}.stat strong{display:block;font-size:24px;margin-top:6px}
-.stat.active{border-color:var(--blue);background:#eff6ff}
-.detailPanel{display:none}.detailPanel.show{display:block}
-.panel{margin-bottom:16px}.panel h2{font-size:18px;margin:0 0 12px}.grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
-label{display:block;font-size:13px;color:#344054;margin-bottom:5px}input,select,textarea{width:100%;border:1px solid #cfd4dc;border-radius:8px;padding:10px;font:inherit;background:white;min-height:40px}textarea{resize:vertical}
-button{border:0;border-radius:8px;padding:10px 13px;font:inherit;font-weight:600;cursor:pointer}.primary{background:var(--blue);color:#fff}.secondary{background:#eef2f6;color:#344054}.danger{background:#fee4e2;color:var(--red)}.success{background:#d1fadf;color:var(--green)}.actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:12px}
-.filters{display:grid;grid-template-columns:2fr 1fr 1fr;gap:10px;margin-bottom:12px}
-.tablewrap{overflow:auto}table{border-collapse:collapse;width:100%;min-width:900px;font-size:13px}th,td{border-bottom:1px solid var(--line);padding:10px 8px;text-align:left;vertical-align:top}th{background:#f8fafc;white-space:nowrap}.badge{display:inline-block;border-radius:20px;padding:4px 8px;font-size:12px;background:#fef0c7;color:#93370d}.badge.late{background:#fee4e2;color:#b42318}.badge.ok{background:#d1fadf;color:#067647}.empty{text-align:center;color:var(--muted);padding:24px}
-footer{color:var(--muted);font-size:12px;text-align:center;padding:12px}
-@media(max-width:800px){.stats{grid-template-columns:repeat(2,1fr)}.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.filters{grid-template-columns:1fr}}
-@media(max-width:480px){header h1{font-size:20px}.grid{grid-template-columns:1fr}.stat strong{font-size:21px}}
+*{box-sizing:border-box}
+body{
+ margin:0;background:#f4f7fb;color:#172033;
+ font-family:Arial,"Noto Sans Bengali",sans-serif
+}
+header{
+ background:#123b70;color:white;padding:18px 15px;
+ text-align:center;box-shadow:0 2px 8px #0002
+}
+header h1{margin:0;font-size:24px}
+header p{margin:5px 0 0;font-size:13px}
+.container{max-width:1100px;margin:auto;padding:15px}
+
+.stats{
+ display:grid;grid-template-columns:repeat(4,1fr);
+ gap:10px;margin-bottom:15px
+}
+.stat{
+ background:white;border-radius:12px;padding:15px;
+ border-left:4px solid #155eef;box-shadow:0 2px 7px #0001
+}
+.stat small{display:block;color:#667085}
+.stat strong{font-size:23px;display:block;margin-top:5px}
+
+.card{
+ background:white;border-radius:12px;padding:16px;
+ margin-bottom:15px;box-shadow:0 2px 8px #0001
+}
+.card h2{margin-top:0;font-size:19px}
+
+.grid{
+ display:grid;grid-template-columns:repeat(2,1fr);gap:12px
+}
+label{display:block;font-size:13px;font-weight:bold;margin-bottom:5px}
+input,select{
+ width:100%;padding:12px;border:1px solid #d0d5dd;
+ border-radius:8px;font-size:15px;outline:none
+}
+input:focus{border-color:#155eef}
+
+button{
+ border:0;border-radius:8px;padding:11px 15px;
+ cursor:pointer;font-size:14px
+}
+.primary{background:#155eef;color:white}
+.success{background:#078647;color:white}
+.danger{background:#d92d20;color:white}
+.gray{background:#667085;color:white}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:15px}
+
+.search{
+ margin-bottom:12px
+}
+
+.table-wrap{overflow-x:auto}
+table{
+ width:100%;border-collapse:collapse;min-width:850px
+}
+th,td{
+ border-bottom:1px solid #eaecf0;padding:11px;
+ text-align:left;font-size:13px
+}
+th{background:#f2f4f7}
+.badge{
+ display:inline-block;padding:5px 8px;border-radius:20px;
+ font-size:12px;font-weight:bold
+}
+.paid{background:#dcfae6;color:#067647}
+.due{background:#fee4e2;color:#b42318}
+
+.empty{
+ text-align:center;padding:30px;color:#667085
+}
+
+@media(max-width:750px){
+ .stats{grid-template-columns:repeat(2,1fr)}
+ .grid{grid-template-columns:1fr}
+ .stat strong{font-size:20px}
+}
 </style>
 </head>
+
 <body>
-<header><h1>কিস্তি আদায় ম্যানেজার</h1><p>কাস্টমার, এলাকার হিসাব, মাসিক কিস্তি ও বারবার ডেট নেওয়ার রেকর্ড</p></header>
-<main>
-<div class="notice"><b>গুরুত্বপূর্ণ:</b> আপনার তথ্য এই ডিভাইসের এই ব্রাউজারেই সেভ হবে। ব্রাউজারের ডেটা মুছে ফেললে তথ্য হারাতে পারে। নিয়মিত JSON ব্যাকআপ ডাউনলোড করে রাখুন।</div>
-<section class="stats">
-<button type="button" class="stat" data-view="all"><small>মোট কাস্টমার (ক্লিক করুন)</small><strong id="total">০</strong></button>
-<button type="button" class="stat" data-view="delayed"><small>ডেট নিয়েছে (ক্লিক করুন)</small><strong id="extensions">০</strong></button>
-<button type="button" class="stat" data-view="due"><small>আজ টাকা দিবে (ক্লিক করুন)</small><strong id="due">০</strong></button>
-<div class="stat" style="cursor:default"><small>এলাকা (মোট)</small><strong id="areas">০</strong></div>
-</section>
-<section class="panel detailPanel" id="quickPanel"><h2 id="quickTitle">কাস্টমার তালিকা</h2><div id="quickInfo" style="font-size:13px;color:#667085;margin-bottom:8px"></div><div class="tablewrap"><table><thead><tr><th>কাস্টমার কোড</th><th>নাম</th><th>এলাকা</th><th>পরবর্তী তারিখ</th><th>বকেয়া</th><th>লাভ (%)</th><th>ডেট</th><th>কাজ</th></tr></thead><tbody id="quickRows"></tbody></table></div></section>
-<section class="panel">
-<h2 id="formTitle">কাস্টমার যোগ করুন / এডিট</h2>
-<form id="customerForm">
-<input type="hidden" id="editId">
+
+<header>
+<h1>Shishir Collection</h1>
+<p>মোটরসাইকেল কিস্তি কালেকশন ম্যানেজার</p>
+</header>
+
+<div class="container">
+
+<!-- DASHBOARD -->
+<div class="stats">
+<div class="stat">
+<small>মোট কাস্টমার</small>
+<strong id="totalCustomers">0</strong>
+</div>
+
+<div class="stat">
+<small>আজকের কালেকশন</small>
+<strong id="todayCollection">৳ 0</strong>
+</div>
+
+<div class="stat">
+<small>এই মাসের কালেকশন</small>
+<strong id="monthCollection">৳ 0</strong>
+</div>
+
+<div class="stat">
+<small>মোট বাকি</small>
+<strong id="totalDue">৳ 0</strong>
+</div>
+</div>
+
+<!-- CUSTOMER FORM -->
+<div class="card">
+<h2 id="formTitle">➕ নতুন কাস্টমার যোগ করুন</h2>
+
 <div class="grid">
-<div><label for="name">কাস্টমারের নাম *</label><input id="name" required placeholder="নাম লিখুন"></div>
-<div><label for="customerCode">কাস্টমার কোড</label><input id="customerCode" placeholder="যেমন: C-001"></div>
-<div><label for="phone">মোবাইল নম্বর</label><input id="phone" inputmode="tel" placeholder="01XXXXXXXXX"></div>
-<div><label for="area">এলাকার নাম *</label><input id="area" required placeholder="যেমন: সোনাডাঙ্গা"></div>
-<div><label for="startDate">কিস্তি শুরুর তারিখ</label><input id="startDate" type="date"></div>
-<div><label for="monthlyDate">প্রতি মাসে কিস্তির তারিখ (দিন)</label><input id="monthlyDate" type="number" min="1" max="31" placeholder="যেমন: ১০"></div>
-<div><label for="amount">মাসিক কিস্তি (টাকা)</label><input id="amount" type="number" min="0" step="any" placeholder="যেমন: ২০০০"></div>
-<div><label for="nextDate">এখন কবে দিবে? *</label><input id="nextDate" type="date" required></div>
-<div><label for="finalDate">পরিশোধ শেষ তারিখ</label><input id="finalDate" type="date"></div>
-<div><label for="balance">অবশিষ্ট টাকা / বকেয়া (টাকা)</label><input id="balance" type="number" min="0" step="any" placeholder="যেমন: ২৫,০০০"></div><div><label for="profitPercent">অবশিষ্ট টাকায় লাভ (%)</label><input id="profitPercent" type="number" min="0" step="any" placeholder="যেমন: ২ বা ৩"></div>
-<div><label for="paidStatus">এই মাসের অবস্থা</label><select id="paidStatus"><option value="বাকি">বাকি</option><option value="পরিশোধ">পরিশোধ</option></select></div>
-<div style="grid-column:1/-1"><label for="notes">নোট / বিশেষ তথ্য</label><textarea id="notes" rows="2" placeholder="যেমন: শুক্রবার দিতে বলেছে"></textarea></div>
+
+<div>
+<label>কাস্টমার কোড *</label>
+<input id="customerCode" placeholder="যেমন: C-001">
 </div>
-<div class="actions"><button class="primary" type="submit" id="saveBtn">কাস্টমার সেভ করুন</button><button class="secondary" type="button" id="cancelEdit" hidden>এডিট বাতিল</button></div>
-</form>
-</section>
-<section class="panel">
-<h2>কাস্টমার খুঁজুন</h2>
-<div class="filters">
-<div><label for="search">কোড / নাম / মোবাইল / এলাকার নাম</label><input id="search" placeholder="লিখে খুঁজুন…"></div>
-<div><label for="areaFilter">এলাকা অনুযায়ী</label><select id="areaFilter"><option value="">সব এলাকা</option></select></div>
-<div><label for="statusFilter">অবস্থা</label><select id="statusFilter"><option value="">সব</option><option value="বাকি">বাকি</option><option value="পরিশোধ">পরিশোধ</option><option value="late">তারিখ পার হয়েছে</option></select></div>
+
+<div>
+<label>কাস্টমারের নাম *</label>
+<input id="customerName" placeholder="কাস্টমারের নাম">
 </div>
-<div class="actions" style="margin:0 0 12px"><button class="secondary" id="exportBtn" type="button">ব্যাকআপ ডাউনলোড (JSON)</button><button class="secondary" id="csvBtn" type="button">Excel-এর জন্য CSV</button><label class="secondary" style="position:relative;overflow:hidden;cursor:pointer;display:inline-flex;align-items:center;margin:0"><input id="importFile" type="file" accept=".json,application/json,text/plain" style="position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer">ব্যাকআপ ফিরিয়ে আনুন</label></div>
-<div id="areaSummary" style="font-size:13px;color:#475467;margin-bottom:10px"></div>
-<div class="tablewrap"><table><thead><tr><th>কোড / নাম / মোবাইল</th><th>এলাকা</th><th>মাসিক কিস্তি</th><th>কিস্তির তারিখ</th><th>এখন দেওয়ার তারিখ</th><th>পরিশোধ শেষ</th><th>বকেয়া</th><th>লাভ (%)</th><th>ডেট নিয়েছে</th><th>অবস্থা</th><th>কাজ</th></tr></thead><tbody id="rows"></tbody></table></div>
-<div id="empty" class="empty" hidden>কোনো কাস্টমার পাওয়া যায়নি।</div>
-</section>
-<footer>কিস্তি আদায় ম্যানেজার • তথ্য আপনার ব্রাউজারে সংরক্ষিত হয়</footer>
-</main>
+
+<div>
+<label>মোবাইল নম্বর</label>
+<input id="phone" type="tel" placeholder="01XXXXXXXXX">
+</div>
+
+<div>
+<label>মোট কিস্তি / বাকি টাকা</label>
+<input id="totalAmount" type="number" placeholder="যেমন: 120000">
+</div>
+
+<div>
+<label>কিস্তির টাকা</label>
+<input id="installmentAmount" type="number" placeholder="যেমন: 5000">
+</div>
+
+<div>
+<label>পরবর্তী কিস্তির তারিখ</label>
+<input id="nextDate" type="date">
+</div>
+
+<div>
+<label>আজ জমা টাকা</label>
+<input id="payment" type="number" placeholder="আজ কত টাকা জমা">
+</div>
+
+</div>
+
+<div class="actions">
+<button class="primary" onclick="saveCustomer()">💾 কাস্টমার সেভ করুন</button>
+<button class="gray" onclick="resetForm()">↻ রিসেট</button>
+</div>
+
+<input type="hidden" id="editId">
+</div>
+
+<!-- SEARCH -->
+<div class="card">
+<h2>🔎 কাস্টমার খুঁজুন</h2>
+<input class="search" id="search" oninput="renderCustomers()"
+placeholder="নাম / কাস্টমার কোড / মোবাইল দিয়ে খুঁজুন">
+</div>
+
+<!-- CUSTOMER LIST -->
+<div class="card">
+<h2>👥 কাস্টমার তালিকা</h2>
+
+<div class="table-wrap">
+<table>
+<thead>
+<tr>
+<th>কোড</th>
+<th>নাম</th>
+<th>মোবাইল</th>
+<th>মোট টাকা</th>
+<th>জমা</th>
+<th>বাকি</th>
+<th>পরবর্তী তারিখ</th>
+<th>অবস্থা</th>
+<th>কাজ</th>
+</tr>
+</thead>
+
+<tbody id="customerTable"></tbody>
+</table>
+</div>
+
+<div id="empty" class="empty">
+কোনো কাস্টমার নেই
+</div>
+</div>
+
+</div>
+
 <script>
-const $=id=>document.getElementById(id);
-const bn=n=>String(n).replace(/\d/g,d=>'০১২৩৪৫৬৭৮৯'[d]);
-const today=()=>{let d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`};
-let customers=[];
-try{customers=JSON.parse(localStorage.getItem('kistiCustomersV1')||'[]')}catch(e){customers=[]}
-customers=customers.map(c=>({...c,customerCode:c.customerCode||'',finalDate:c.finalDate||'',balance:c.balance??0,profitPercent:c.profitPercent??0}));
-const save=()=>localStorage.setItem('kistiCustomersV1',JSON.stringify(customers));
-const dateBn=s=>s? s.split('-').reverse().map((x)=>bn(x)).join('/'): '—';
-const money=n=>'৳ '+bn(Number(n||0).toLocaleString('en-US'));
-const isLate=c=>c.status!=='পরিশোধ' && c.nextDate && c.nextDate<today();
-function render(){
- const q=$('search').value.trim().toLowerCase(), af=$('areaFilter').value, sf=$('statusFilter').value;
- const areas=[...new Set(customers.map(c=>c.area.trim()).filter(Boolean))].sort((a,b)=>a.localeCompare(b,'bn'));
- const old=$('areaFilter').value;
- $('areaFilter').innerHTML='<option value="">সব এলাকা</option>'+areas.map(a=>`<option>${esc(a)}</option>`).join('');
- if(areas.includes(old))$('areaFilter').value=old;
- const filtered=customers.filter(c=>{
-  const text=[c.customerCode,c.name,c.phone,c.area].join(' ').toLowerCase();
-  if(q&&!text.includes(q))return false;if(af&&c.area!==af)return false;
-  if(sf==='বাকি'&&c.status!=='বাকি')return false;if(sf==='পরিশোধ'&&c.status!=='পরিশোধ')return false;if(sf==='late'&&!isLate(c))return false;return true;
- });
- $('total').textContent=bn(customers.length);
- $('due').textContent=bn(customers.filter(c=>c.status!=='পরিশোধ'&&c.nextDate&&c.nextDate===today()).length);
- $('extensions').textContent=bn(customers.reduce((s,c)=>s+(c.delays||0),0));
- $('areas').textContent=bn(areas.length);
- $('areaSummary').textContent=af?`“${af}” এলাকায় মোট ${bn(customers.filter(c=>c.area===af).length)} জন কাস্টমার আছে।`:`সব এলাকায় মোট ${bn(customers.length)} জন কাস্টমার • ${bn(areas.length)}টি এলাকা`;
- $('rows').innerHTML=filtered.map(c=>`<tr>
- <td><small>${esc(c.customerCode||'কোড নেই')}</small><br><b><a href="#" onclick="printCustomer('${c.id}');return false">${esc(c.name)}</a></b><br>${esc(c.phone||'মোবাইল নেই')}</td><td>${esc(c.area)}</td>
- <td>${money(c.amount)}</td><td>${c.monthlyDate?`প্রতি মাসের ${bn(c.monthlyDate)} তারিখ`:'—'}<br><small>${dateBn(c.startDate)}</small></td>
- <td>${dateBn(c.nextDate)}</td><td>${dateBn(c.finalDate)}</td><td>${money(c.balance)}</td><td>${bn(c.profitPercent||0)}%<br><small>${money(Number(c.balance||0)*Number(c.profitPercent||0)/100)}</small></td><td><b>${bn(c.delays||0)} বার</b>${c.history&&c.history.length?`<br><small>সর্বশেষ: ${dateBn(c.history[c.history.length-1].date)}</small>`:''}</td>
- <td><span class="badge ${c.status==='পরিশোধ'?'ok':isLate(c)?'late':''}">${isLate(c)?'তারিখ পার হয়েছে':esc(c.status||'বাকি')}</span></td>
- <td><div class="actions" style="margin:0">
- <button class="success" onclick="paid('${c.id}')">পরিশোধ</button>
- <button class="secondary" onclick="delayDate('${c.id}')">ডেট নিল</button>
- <button class="secondary" onclick="editCustomer('${c.id}')">এডিট</button>
- <button class="danger" onclick="removeCustomer('${c.id}')">মুছুন</button>
- </div></td></tr>`).join('');
- $('empty').hidden=filtered.length>0;
+
+let customers = JSON.parse(localStorage.getItem("shishirCustomers") || "[]");
+
+function money(n){
+ return "৳ " + Number(n || 0).toLocaleString("bn-BD");
 }
-function esc(v){return String(v??'').replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]))}
-$('customerForm').addEventListener('submit',e=>{
- e.preventDefault();const id=$('editId').value||String(Date.now());
- const old=customers.find(c=>c.id===id);
- const c={id,customerCode:$('customerCode').value.trim(),finalDate:$('finalDate').value,balance:$('balance').value,profitPercent:$('profitPercent').value,name:$('name').value.trim(),phone:$('phone').value.trim(),area:$('area').value.trim(),startDate:$('startDate').value,monthlyDate:$('monthlyDate').value,amount:$('amount').value,nextDate:$('nextDate').value,status:$('paidStatus').value,notes:$('notes').value.trim(),delays:old?.delays||0,history:old?.history||[],created:old?.created||today()};
- if(old)customers=customers.map(x=>x.id===id?c:x);else customers.unshift(c);
- save();e.target.reset();$('editId').value='';$('formTitle').textContent='নতুন কাস্টমার যোগ করুন';$('saveBtn').textContent='কাস্টমার সেভ করুন';$('cancelEdit').hidden=true;render();
-});
-window.editCustomer=id=>{const c=customers.find(x=>x.id===id);if(!c)return;
- $('editId').value=c.id;['customerCode','finalDate','balance','profitPercent','name','phone','area','startDate','monthlyDate','amount','nextDate','paidStatus','notes'].forEach(k=>{const key=k==='paidStatus'?'status':k;$ (k).value=c[key]??''});
- $('formTitle').textContent='কাস্টমারের তথ্য এডিট করুন';$('saveBtn').textContent='পরিবর্তন সেভ করুন';$('cancelEdit').hidden=false;window.scrollTo({top:0,behavior:'smooth'});
-};
-$('cancelEdit').onclick=()=>{ $('customerForm').reset();$('editId').value='';$('formTitle').textContent='নতুন কাস্টমার যোগ করুন';$('saveBtn').textContent='কাস্টমার সেভ করুন';$('cancelEdit').hidden=true;};
-window.delayDate=id=>{const c=customers.find(x=>x.id===id);if(!c)return;const d=prompt(`${c.name} কত তারিখে টাকা দেবে? (YYYY-MM-DD লিখুন)`,c.nextDate||today());if(!d)return;if(!/^\d{4}-\d{2}-\d{2}$/.test(d)){alert('তারিখ YYYY-MM-DD ফরম্যাটে লিখুন, যেমন 2026-11-05');return;}c.delays=(c.delays||0)+1;c.history=c.history||[];c.history.push({date:today(),newDate:d});c.nextDate=d;c.status='বাকি';save();render();};
-window.paid=id=>{const c=customers.find(x=>x.id===id);if(!c)return;if(!confirm(`${c.name} এই মাসের কিস্তি পরিশোধ করেছে?`))return;c.status='পরিশোধ';c.history=c.history||[];c.history.push({date:today(),type:'পরিশোধ'});save();render();};
-window.removeCustomer=id=>{const c=customers.find(x=>x.id===id);if(c&&confirm(`${c.name}–এর তথ্য মুছে ফেলবেন?`)){customers=customers.filter(x=>x.id!==id);save();render();}};
-['search','areaFilter','statusFilter'].forEach(id=>$(id).addEventListener(id==='search'?'input':'change',render));
-$('exportBtn').onclick=()=>download('kisti-backup-'+today()+'.json',JSON.stringify(customers,null,2),'application/json');
-$('csvBtn').onclick=()=>{const cols=['customerCode','name','phone','area','startDate','monthlyDate','amount','nextDate','finalDate','balance','profitPercent','delays','status','notes'];const lines=[cols.join(','),...customers.map(c=>cols.map(k=>'"'+String(c[k]??'').replace(/"/g,'""')+'"').join(','))];download('kisti-customers-'+today()+'.csv','\ufeff'+lines.join('\r\n'),'text/csv;charset=utf-8;');};
-function download(name,data,type){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([data],{type}));a.download=name;a.click();URL.revokeObjectURL(a.href)}
-$('importFile').addEventListener('change',async e=>{
- const f=e.target.files && e.target.files[0]; if(!f)return;
- try{
-  let txt=await f.text(); txt=txt.replace(/^\\uFEFF/,'').trim();
-  const raw=JSON.parse(txt);
-  let data=Array.isArray(raw)?raw:
-    (Array.isArray(raw.customers)?raw.customers:
-    (Array.isArray(raw.data)?raw.data:
-    (Array.isArray(raw.records)?raw.records:null)));
-  if(!data)throw new Error('ফাইলের JSON কাঠামো সঠিক নয়');
-  if(!data.length){alert('ব্যাকআপ ফাইলে কোনো কাস্টমার নেই।');return;}
-  const choice=prompt('ব্যাকআপ কীভাবে আনবেন?\\n1 = বর্তমান তথ্যের সঙ্গে যোগ (Merge)\\n2 = বর্তমান তথ্য বাদ দিয়ে ব্যাকআপ বসান (Replace)\\n১ অথবা ২ লিখুন','1');
-  const normalized=data.filter(c=>c&&typeof c==='object').map((c,i)=>({...c,
-    id:String(c.id||('import-'+Date.now()+'-'+i)),
-    customerCode:c.customerCode||'',finalDate:c.finalDate||'',
-    balance:c.balance??0,profitPercent:c.profitPercent??0,
-    delays:c.delays??0,status:c.status||'বাকি'
-  }));
-  if(choice==='2'){
-   if(confirm('সতর্কতা: বর্তমান তালিকা মুছে ব্যাকআপের তথ্য বসবে। নিশ্চিত?')){
-    customers=normalized;save();render();alert('ব্যাকআপ সফল! মোট '+bn(customers.length)+' জন কাস্টমার এসেছে।');
+
+function saveData(){
+ localStorage.setItem("shishirCustomers",JSON.stringify(customers));
+}
+
+function saveCustomer(){
+
+ let code=document.getElementById("customerCode").value.trim();
+ let name=document.getElementById("customerName").value.trim();
+ let phone=document.getElementById("phone").value.trim();
+ let total=Number(document.getElementById("totalAmount").value||0);
+ let installment=Number(document.getElementById("installmentAmount").value||0);
+ let nextDate=document.getElementById("nextDate").value;
+ let payment=Number(document.getElementById("payment").value||0);
+ let editId=document.getElementById("editId").value;
+
+ if(!code || !name){
+   alert("কাস্টমার কোড এবং নাম অবশ্যই দিতে হবে।");
+   return;
+ }
+
+ if(editId){
+
+   let c=customers.find(x=>x.id==editId);
+
+   if(c){
+     c.code=code;
+     c.name=name;
+     c.phone=phone;
+     c.total=total;
+     c.installment=installment;
+     c.nextDate=nextDate;
+
+     if(payment>0){
+       c.paid=Number(c.paid||0)+payment;
+       c.payments.push({
+         amount:payment,
+         date:new Date().toISOString().slice(0,10)
+       });
+     }
    }
-  }else if(choice==='1'){
-   let added=0;const ids=new Set(customers.map(c=>String(c.id)));
-   normalized.forEach((c,i)=>{let id=c.id;if(ids.has(id)){id='import-'+Date.now()+'-'+i;}ids.add(id);customers.push({...c,id});added++;});
-   save();render();alert('ব্যাকআপ থেকে '+bn(added)+' জন কাস্টমার যোগ হয়েছে।');
-  }else alert('১ বা ২ নির্বাচন করুন।');
- }catch(err){alert('JSON ফাইল পড়া যায়নি: '+(err.message||'ফাইলটি পরীক্ষা করুন')+'\\nসঠিক ব্যাকআপ JSON ফাইল নির্বাচন করুন।');}
- e.target.value='';
-});
 
-window.printCustomer=id=>{
- const c=customers.find(x=>x.id===id);if(!c)return;
- const profit=Number(c.balance||0)*Number(c.profitPercent||0)/100;
- const w=window.open('','_blank');
- if(!w){alert('প্রিন্ট ভিউ খুলতে পপ-আপ অনুমতি দিন।');return;}
- w.document.write(`<!doctype html><html lang="bn"><head><meta charset="utf-8"><title>কাস্টমার তথ্য</title><style>body{font-family:Arial,'Noto Sans Bengali',sans-serif;padding:25px;color:#111}h1{text-align:center}table{width:100%;border-collapse:collapse}td{border:1px solid #bbb;padding:10px}td:first-child{width:35%;font-weight:bold}.btn{margin:15px 0;padding:9px 16px}@media print{.btn{display:none}}</style></head><body><h1>কাস্টমারের সম্পূর্ণ তথ্য</h1><table>
- <tr><td>কাস্টমার কোড</td><td>${esc(c.customerCode||'—')}</td></tr><tr><td>নাম</td><td>${esc(c.name)}</td></tr><tr><td>মোবাইল</td><td>${esc(c.phone||'—')}</td></tr><tr><td>এলাকা</td><td>${esc(c.area||'—')}</td></tr><tr><td>কিস্তি শুরুর তারিখ</td><td>${dateBn(c.startDate)}</td></tr><tr><td>মাসিক কিস্তির দিন</td><td>${esc(c.monthlyDate||'—')}</td></tr><tr><td>মাসিক কিস্তি</td><td>${money(c.amount)}</td></tr><tr><td>এখন দেওয়ার তারিখ</td><td>${dateBn(c.nextDate)}</td></tr><tr><td>পরিশোধ শেষ তারিখ</td><td>${dateBn(c.finalDate)}</td></tr><tr><td>অবস্থা</td><td>${esc(c.status||'বাকি')}</td></tr><tr><td>কতবার ডেট</td><td>${bn(c.delays||0)} বার</td></tr><tr><td>অবশিষ্ট বকেয়া</td><td>${money(c.balance)}</td></tr><tr><td>লাভের হার</td><td>${bn(c.profitPercent||0)}%</td></tr><tr><td>অবশিষ্ট টাকার লাভ</td><td>${money(profit)}</td></tr><tr><td>নোট</td><td>${esc(c.notes||'—')}</td></tr></table><button class="btn" onclick="window.print()">প্রিন্ট করুন</button></body></html>`);
- w.document.close();
-};
+ }else{
 
-function showQuick(view){
- document.querySelectorAll('[data-view]').forEach(b=>b.classList.toggle('active',b.dataset.view===view));
- const list=view==='all'?customers:view==='delayed'?customers.filter(c=>(c.delays||0)>0):customers.filter(c=>c.status!=='পরিশোধ'&&c.nextDate&&c.nextDate===today());
- $('quickTitle').textContent=view==='all'?'সকল কাস্টমার':view==='delayed'?'ডেট নেওয়া কাস্টমার':'আজ টাকা দেওয়ার কাস্টমার';
- $('quickInfo').textContent=`মোট ${bn(list.length)} জন`;
- $('quickRows').innerHTML=list.map(c=>`<tr>
- <td>${esc(c.customerCode||'—')}</td>
- <td><a href="#" onclick="printCustomer('${c.id}');return false">${esc(c.name)}</a><br><small>${esc(c.phone||'')}</small></td>
- <td>${esc(c.area)}</td><td>${dateBn(c.nextDate)}</td><td>${money(c.balance)}</td>
- <td>${bn(c.profitPercent||0)}%<br><small>${money(Number(c.balance||0)*Number(c.profitPercent||0)/100)}</small></td>
- <td>${bn(c.delays||0)} বার</td>
- <td><div class="actions" style="margin:0">
- <button class="success" onclick="paid('${c.id}')">পরিশোধ</button>
- <button class="secondary" onclick="delayDate('${c.id}')">ডেট নিল</button>
- <button class="secondary" onclick="editCustomer('${c.id}')">এডিট</button>
- <button class="danger" onclick="removeCustomer('${c.id}')">মুছুন</button>
- </div></td></tr>`).join('')||'<tr><td colspan="8" class="empty">কোনো কাস্টমার নেই</td></tr>';
- $('quickPanel').classList.add('show');$('quickPanel').scrollIntoView({behavior:'smooth',block:'start'});
+   if(customers.some(x=>x.code===code)){
+     alert("এই কাস্টমার কোড আগে থেকেই আছে।");
+     return;
+   }
+
+   customers.push({
+     id:Date.now(),
+     code,
+     name,
+     phone,
+     total,
+     installment,
+     paid:payment,
+     nextDate,
+     payments: payment>0 ? [{
+       amount:payment,
+       date:new Date().toISOString().slice(0,10)
+     }] : []
+   });
+ }
+
+ saveData();
+ resetForm();
+ renderCustomers();
+ updateDashboard();
+
+ alert("কাস্টমার তথ্য সফলভাবে সেভ হয়েছে।");
 }
-document.querySelectorAll('[data-view]').forEach(b=>b.addEventListener('click',()=>showQuick(b.dataset.view)));
 
-render();
+function editCustomer(id){
+
+ let c=customers.find(x=>x.id==id);
+ if(!c)return;
+
+ document.getElementById("editId").value=c.id;
+ document.getElementById("customerCode").value=c.code;
+ document.getElementById("customerName").value=c.name;
+ document.getElementById("phone").value=c.phone;
+ document.getElementById("totalAmount").value=c.total;
+ document.getElementById("installmentAmount").value=c.installment;
+ document.getElementById("nextDate").value=c.nextDate;
+
+ document.getElementById("payment").value="";
+
+ document.getElementById("formTitle").innerText="✏️ কাস্টমার তথ্য পরিবর্তন করুন";
+
+ window.scrollTo({top:0,behavior:"smooth"});
+}
+
+function deleteCustomer(id){
+
+ if(!confirm("এই কাস্টমারকে ডিলিট করতে চান?"))return;
+
+ customers=customers.filter(x=>x.id!=id);
+
+ saveData();
+ renderCustomers();
+ updateDashboard();
+
+ alert("কাস্টমার ডিলিট হয়েছে।");
+}
+
+function resetForm(){
+
+ document.getElementById("editId").value="";
+ document.getElementById("customerCode").value="";
+ document.getElementById("customerName").value="";
+ document.getElementById("phone").value="";
+ document.getElementById("totalAmount").value="";
+ document.getElementById("installmentAmount").value="";
+ document.getElementById("nextDate").value="";
+ document.getElementById("payment").value="";
+
+ document.getElementById("formTitle").innerText="➕ নতুন কাস্টমার যোগ করুন";
+}
+
+function renderCustomers(){
+
+ let tbody=document.getElementById("customerTable");
+ let empty=document.getElementById("empty");
+ let search=document.getElementById("search").value.toLowerCase();
+
+ tbody.innerHTML="";
+
+ let list=customers.filter(c=>
+   c.name.toLowerCase().includes(search) ||
+   c.code.toLowerCase().includes(search) ||
+   c.phone.toLowerCase().includes(search)
+ );
+
+ if(list.length===0){
+   empty.style.display="block";
+   return;
+ }
+
+ empty.style.display="none";
+
+ list.forEach(c=>{
+
+   let due=Math.max(0,Number(c.total)-Number(c.paid));
+
+   let status=due<=0
+      ? `<span class="badge paid">সম্পূর্ণ পরিশোধ</span>`
+      : `<span class="badge due">বাকি ${money(due)}</span>`;
+
+   let date=c.nextDate
+      ? new Date(c.nextDate+"T00:00:00").toLocaleDateString("bn-BD")
+      : "-";
+
+   tbody.innerHTML+=`
+
+   <tr>
+   <td><b>${escapeHtml(c.code)}</b></td>
+
+   <td>${escapeHtml(c.name)}</td>
+
+   <td>${escapeHtml(c.phone||"-")}</td>
+
+   <td>${money(c.total)}</td>
+
+   <td>${money(c.paid)}</td>
+
+   <td><b>${money(due)}</b></td>
+
+   <td>${date}</td>
+
+   <td>${status}</td>
+
+   <td>
+   <button class="primary" onclick="editCustomer(${c.id})">✏️</button>
+   <button class="danger" onclick="deleteCustomer(${c.id})">🗑️</button>
+   </td>
+
+   </tr>
+   `;
+ });
+}
+
+function escapeHtml(text){
+
+ return String(text||"")
+ .replace(/&/g,"&amp;")
+ .replace(/</g,"&lt;")
+ .replace(/>/g,"&gt;")
+ .replace(/"/g,"&quot;")
+ .replace(/'/g,"&#039;");
+}
+
+function updateDashboard(){
+
+ document.getElementById("totalCustomers").innerText=
+   customers.length;
+
+ let today=new Date().toISOString().slice(0,10);
+
+ let month=today.slice(0,7);
+
+ let todayTotal=0;
+ let monthTotal=0;
+
+ customers.forEach(c=>{
+
+   (c.payments||[]).forEach(p=>{
+
+     if(p.date===today){
+       todayTotal+=Number(p.amount||0);
+     }
+
+     if(p.date.startsWith(month)){
+       monthTotal+=Number(p.amount||0);
+     }
+
+   });
+
+ });
+
+ let due=customers.reduce(
+   (sum,c)=>sum+Math.max(0,Number(c.total)-Number(c.paid)),0
+ );
+
+ document.getElementById("todayCollection").innerText=
+   money(todayTotal);
+
+ document.getElementById("monthCollection").innerText=
+   money(monthTotal);
+
+ document.getElementById("totalDue").innerText=
+   money(due);
+}
+
+renderCustomers();
+updateDashboard();
+
 </script>
-</body></html>
+
+</body>
+</html>
